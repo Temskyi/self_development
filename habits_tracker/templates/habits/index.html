@@ -1,0 +1,41 @@
+{% extends 'habits/base.html' %}
+
+{% block content %}
+
+<div style="margin-top: 50px;" class="ui container">
+    <div style="margin-bottom: 50px;">
+        <a class="ui red right floated button" href="{% url 'logout' %}">Выйти</a>
+        <p class="ui basic right floated button">{{user.username}}</p>
+    </div>
+    <br>
+    <h1 class="ui center aligned header">Трекер привычек</h1>
+    <h3 class="test_style">Управляй своими привычками!</h3>
+    <form class="ui form" action="{% url 'add' %}" method="post">
+        {% csrf_token %}
+        <div class="field">
+            <label>Новая привычка</label>
+            <input type="text" name="name" placeholder="Введите название привычки"><br>
+        </div>
+        <button class="ui teal basic button" type="submit">Добавить</button>
+        <a class="ui blue right floated primary button" href="{% url 'statistic' %}">Статистика</a>
+    </form>
+
+
+{% for habit in today_habits %}
+<div class="ui segment">
+    <p class="ui big header">{{ habit.habit }}</p>
+
+    {% if habit.is_completed == False %}
+    <span  class="ui gray label">Не завершено</span>
+    <a class="ui blue primary button" href="{% url 'update' habit_id=habit.habit_id %}">Выполнить</a>
+    {% else %}
+    <span style="width: 102.59px;" class="ui green label">Завершено</span>
+    <a style="width: 122.16px;" class="ui basic button" href="{% url 'update' habit_id=habit.habit_id %}">Отменить</a>
+    {% endif %}
+    <a class="ui negative basic button" href="{% url 'delete' habit_id=habit.habit.id %}">Удалить</a>
+    <a class="ui  basic button" href="{% url 'show_qr' habit_id=habit.habit.id %}">QR</a>
+</div>
+{% endfor %}
+</div>
+
+{% endblock content %}

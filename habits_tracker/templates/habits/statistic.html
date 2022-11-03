@@ -1,0 +1,76 @@
+{% extends 'habits/base.html' %}
+
+{% block content %}
+
+
+
+
+
+
+<div style="margin-top: 50px;margin-bottom: 100px;" class="ui container">
+    <h1 class="ui center aligned header">Трекер привычек</h1>
+    <h3 class="test_style">{{title}}</h3>
+    {% if months|length_is:"1" %}
+    {% elif months|length_is:"2" %}
+    <div class="two ui buttons">
+        <a class="ui button" href="{% url 'statistic_previous' month=1 %}">Статистика за {{ months|first }}</a>
+        <a class="ui button" href="{% url 'statistic' %}">Статистика за {{months|last}}</a>
+    </div>
+    {% elif months|length_is:"3" %}
+    <div class="three ui buttons">
+        {% for month in months %}
+        {% if forloop.counter0 == 0 %}
+        <a class="ui button" href="{% url 'statistic_previous' month=2 %}">Статистика за {{month}}</a>
+        {% elif forloop.counter0 == 1 %}
+        <a class="ui button" href="{% url 'statistic_previous' month=1 %}">Статистика за {{month}}</a>
+        {% elif forloop.counter0 == 2 %}
+        <a class="ui button" href="{% url 'statistic' %}">Статистика за {{month}}</a>
+        {% endif%}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+<table class="ui definition table">
+
+    <thead>
+        <tr>
+            <th></th>
+            {% for day in days %}
+            <th>{{ day }}</th>
+            {% endfor%}
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for habit_cat in habits_list %}
+        <tr>
+            <td>
+            {{ habit_cat }}
+            </td>
+            {% for habit in month_habits %}
+
+                {% if habit.habit == habit_cat %}
+            <td>
+                {% if habit.is_completed == False %}
+                <a href="{% url 'statistic_update' habit_id=habit.habit_id day=habit.day.day %}"><span style="width: 26px;" class="ui red label">-</span></a>
+                {% else %}
+                <a href="{% url 'statistic_update' habit_id=habit.habit_id day=habit.day.day %}"><span style="width: 26px;" class="ui green label">+</span></a>
+                {% endif %}
+            </td>
+                {% endif %}
+
+            {% endfor %}
+        </tr>
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+<a class="fluid blue ui button" href="{% url 'index' %}">На главную</a>
+
+
+
+
+{% endblock content %}

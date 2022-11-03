@@ -1,0 +1,28 @@
+{% extends 'habits/base.html' %}
+
+{% block content %}
+
+
+<section class="registration">
+<div class="container">
+    <div class="registration__title"><h1>{{title}}</h1></div>
+
+    <form class="ui form" method="post">
+    {% csrf_token %}
+
+    <div class="field error">{{ form.non_field_errors }}</div>
+
+{% for f in form %}
+        <div class="field">
+            <p><label for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
+        </div>
+        <div class="field error">{{ f.errors }}</div>
+{% endfor %}
+
+    <button style="width:130px;" class="ui button left floated" type="submit">Войти</button>
+    <a href="{% url 'register' %}" style="width:130px;"  class="ui button right floated">Регистрация</a>
+    </form>
+</div>
+</section>
+
+{% endblock content %}
