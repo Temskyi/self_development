@@ -3,7 +3,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', HabitsHome.as_view(), name='index'),
+    path('', HabitsHome.as_view(), name='habits_tracker_index'),
     path('statistic/', Statistic.as_view(), name='statistic'),
     path('statistic/<int:month>/', StatisticPrevious.as_view(), name='statistic_previous'),
     path('add/', add, name='add'),

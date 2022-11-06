@@ -1,0 +1,50 @@
+{% extends 'calorie_tracker/calorie_tracker_base.html' %}
+
+{% block title %}Food Tracker | Новое блюдо{% endblock %}
+
+{% block body %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+
+        {% if success %}
+            <br>
+            <div class='alert alert-dismissible alert-success' role='alert'>
+                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+                Новое блюдо успешно добавлено.
+            </div>
+        {% else %}
+            <div class='d-flex justify-content-center'>
+                <h3>Добавить блюдо</h3>
+            </div>
+            <div class='d-flex justify-content-center'>
+                <p>Введите информацию о новом блюде</p>
+            </div>
+            
+                <div class='row'>
+                    <div class='col-lg-6 offset-lg-3'>
+                        <div class='card bg-secondary mb-3'>
+                            <div class='card-body'>
+    
+                                <div class='form-group'>
+                                    <form action="{% url 'dish_add' %}" method='POST' enctype='multipart/form-data'>
+                                        {% csrf_token %}
+                                        <div class="form-error">{{ form.non_field_errors }}</div>
+
+                                        <div class='form-group'>
+                                            {{ dish_form.as_p }}
+
+                                            <button type='submit' class='btn btn-primary'>Сохранить</button>
+                                            <a href="{% url 'calorie_counter_index' %}" class='btn btn-outline-dark'>Отменить</a>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

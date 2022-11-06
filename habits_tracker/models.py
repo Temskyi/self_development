@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Habits(models.Model):
@@ -7,7 +7,7 @@ class Habits(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     qr = models.ImageField(upload_to="qr_images")
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
 

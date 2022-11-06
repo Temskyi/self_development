@@ -4,18 +4,14 @@ import datetime
 from pathlib import Path
 from calendar import monthrange
 
-from django.contrib.auth import logout, login
-from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 
-from .forms import *
 from .models import *
 from django.conf.global_settings import ALLOWED_HOSTS
 
@@ -61,7 +57,7 @@ class HabitsHome(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['today_habits'] = _get_today_habits(self.request.user.id)
-        context['title'] = 'Главная страница'
+        context['title'] = ''
         return context
 
 
@@ -123,7 +119,8 @@ class Statistic(LoginRequiredMixin, ListView):
         context['month_habits'] = Tracking.objects.filter(
             day__gte=f'{datetime.datetime.now().year}-{datetime.datetime.now().month}-01',
             habit__in=user_habits
-        ).select_related('habit').order_by('habit_id')
+        ).select_related('habit').order_by('day')
+        print(context['month_habits'])
         context['habits_list'] = Habits.objects.filter(user_id=self.request.user.id)
         context['days'] = list(range(1, _get_days_in_month() + 1))
         context['title'] = 'Статистика привычек за месяц'
@@ -159,7 +156,7 @@ class StatisticPrevious(Statistic):
         context['month_habits'] = Tracking.objects.filter(
             day__range=(first_day, last_day),
             habit__in=user_habits
-        ).select_related('habit').order_by('habit_id')
+        ).select_related('habit').order_by('day')
         context['days'] = list(range(1, _get_days_in_month(self.kwargs["month"]) + 1))
         context['title'] = f'Статистика привычек за {self.get_month_name(month_num)}'
         context['progress'] = self.get_statistic(_get_days_in_month(self.kwargs["month"]), context['month_habits'])
@@ -170,7 +167,8 @@ class StatisticPrevious(Statistic):
 def show_qr(request, habit_id):
     """Страница с отображением QR-кода привычки"""
     context = {'url': f'/media/habits_tracker/qr_images/{habit_id}.jpg',
-               'title': 'QR-код привычки'}
+               'title': '| QR-код привычки'}
+    print(context)
     return render(request, 'habits/qr.html', context=context)
 
 
@@ -182,7 +180,7 @@ def add(request):
     _get_today_habits(request.user.id)
     name = request.POST['name']
     if len(name) == 0:
-        return redirect('index')
+        return redirect('habits_tracker_index')
     user_id = request.user.id
     habit = Habits(name=name, user_id=user_id)
     habit.save()
@@ -198,7 +196,7 @@ def add(request):
     qr.save(f'media/habits_tracker/qr_images/{habit.id}.jpg', 'JPEG')
     habit.qr = f'qr_images/{habit.id}.jpg'
     habit.save()
-    return redirect('index')
+    return redirect('habits_tracker_index')
 
 
 @login_required(login_url='/login/')
@@ -208,7 +206,7 @@ def update(request, habit_id):
     if request.user.id == habit.habit.user_id:
         habit.is_completed = not habit.is_completed
         habit.save()
-    return redirect('index')
+    return redirect('habits_tracker_index')
 
 
 @login_required(login_url='/login/')
@@ -229,41 +227,7 @@ def delete(request, habit_id):
     root_path = str(Path(__file__).resolve().parent.parent)
     os.remove(root_path + f'/media/habits_tracker/qr_images/{habit_id}.jpg')
     habit.delete()
-    return redirect('index')
-
-
-class RegisterUser(CreateView):
-    form_class = RegisterUserForm
-    template_name = 'habits/register.html'
-    success_url = reverse_lazy('index')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Регистрация'
-        return context
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('index')
-
-
-class LoginUser(LoginView):
-    form_class = AuthenticationForm
-    template_name = 'habits/login.html'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Авторизация'
-        return context
-
-    def get_success_url(self):
-        return reverse_lazy('index')
-
-
-def logout_user(request):
-    logout(request)
-    return redirect('login')
+    return redirect('habits_tracker_index')
 
 
 def pageNotFound(request, exception):

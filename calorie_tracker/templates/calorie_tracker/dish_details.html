@@ -1,0 +1,102 @@
+{% extends 'calorie_tracker/calorie_tracker_base.html' %}
+
+{% load static %}
+
+{% block title %}Food Tracker | {{ dish.name }}{% endblock %}
+
+{% block body %}
+<div class='py-4 mt-auto'>
+    <div class='container-fluid px-4'>
+        <a href="{% url 'dish_list' %}" class='btn btn-outline-primary my-3'>Назад</a>
+
+        <h3>{{ dish.name }}</h3>
+
+        <div class='row justify-content-center'>
+            <div class='col-6'>
+
+                <!-- Food image -->
+                {% if dish.image %}
+                    <a href='#'>
+                        <img
+                            src="{{ dish.image.url }}"
+                            class='img-fluid'
+                            alt='food image'
+                        >
+                    </a>
+                    {% else %}
+                    <a href='#'>
+                        <img
+                            src="{% static 'calorie_tracker/images/no_image.png' %}"
+                            class='img-fluid'
+                            alt='food image'
+                        >
+                    </a>
+                    {% endif %}
+
+            </div>
+            <div class='col-6'>
+                <div class='card text-white bg-info mb-3'>
+                    <div class='card-header'>
+                        <div class='d-flex w-100 justify-content-between'>
+                            <h5 class='card-title mb-1'>
+                                Калорий на 100 грамм:
+                            </h5>
+                            <p><strong>{{ dish.calories }}</strong></p>
+
+                            <input type='hidden' id='calories_details' name='calories_details' value='{{ dish.calories }}'>
+                            <input type='hidden' id='fat_details' name='calories_details' value='{{ dish.fat }}'>
+                            <input type='hidden' id='carbohydrates_details' name='calories_details' value='{{ dish.carbohydrates }}'>
+                            <input type='hidden' id='protein_details' name='calories_details' value='{{ dish.protein }}'>
+                        
+                        </div>
+                    </div>
+                    <div class='card-body'>
+
+                        <div class='d-flex w-100 justify-content-between'>
+                            <h5 class='card-title'>
+                                Макронутриенты на 100 грамм:
+                            </h5>
+                        </div>
+
+                        <div class='d-flex w-100 justify-content-between'>
+                            <p class='mb-1'>Жиры:</p>
+                            <p><strong>{{ dish.fat }}</strong></p>
+                        </div>
+
+                        <div class='d-flex w-100 justify-content-between'>
+                            <p class='mb-1'>Углеводы:</p>
+                            <p><strong>{{ dish.carbohydrates }}</strong></p>
+                        </div>
+
+                        <div class='d-flex w-100 justify-content-between'>
+                            <p class='mb-1'>Белки:</p>
+                            <p><strong>{{ dish.protein }}</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='card bg-secondary mb-3'>
+                    <div class='card-header'>
+                        <h4>Анализ макронутриентов</h4>
+                    </div>
+                    <div class='card-body justify-content-center'>
+                        <div class='chart-bar'>
+                            <canvas id='myBarChart'></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <!-- Page level plugins -->    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{% static 'calorie_tracker/js/dish_details.js' %}"></script>
+{% endblock %}
