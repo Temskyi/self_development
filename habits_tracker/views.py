@@ -32,7 +32,7 @@ def _get_today_habits(user_id):
     """Получение привычек на день"""
     user_habits = Habits.objects.filter(user=user_id)
     today_habits = Tracking.objects.filter(day=datetime.date.today(),
-                                           habit__in=user_habits).select_related('habit')
+                                           habit__in=user_habits).select_related('habit').order_by('id')
 
     if len(today_habits) == 0:
         objects_list = []
@@ -43,7 +43,7 @@ def _get_today_habits(user_id):
         Tracking.objects.bulk_create(objects_list)
 
         today_habits = Tracking.objects.filter(day=datetime.date.today(),
-                                               habit__in=user_habits)
+                                               habit__in=user_habits).order_by('id')
 
     return today_habits
 
@@ -120,7 +120,6 @@ class Statistic(LoginRequiredMixin, ListView):
             day__gte=f'{datetime.datetime.now().year}-{datetime.datetime.now().month}-01',
             habit__in=user_habits
         ).select_related('habit').order_by('day')
-        print(context['month_habits'])
         context['habits_list'] = Habits.objects.filter(user_id=self.request.user.id)
         context['days'] = list(range(1, _get_days_in_month() + 1))
         context['title'] = 'Статистика привычек за месяц'
@@ -168,7 +167,6 @@ def show_qr(request, habit_id):
     """Страница с отображением QR-кода привычки"""
     context = {'url': f'/media/habits_tracker/qr_images/{habit_id}.jpg',
                'title': '| QR-код привычки'}
-    print(context)
     return render(request, 'habits/qr.html', context=context)
 
 

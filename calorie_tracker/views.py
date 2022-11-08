@@ -18,16 +18,15 @@ class DishList(LoginRequiredMixin, ListView):
     template_name = 'calorie_tracker/dish_list.html'
     login_url = '/login/'
     paginate_by = 4
-
-    def get_dishes_list(self, user_id):
-        dishes = Dish.objects.filter(Q(creator=user_id) | Q(creator=None))
-        return dishes
+    context_object_name = 'dishes'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['dishes'] = self.get_dishes_list(self.request.user.id)
         context['title'] = 'Список блюд'
         return context
+
+    def get_queryset(self):
+        return Dish.objects.filter(Q(creator=self.request.user.id) | Q(creator=None))
 
 
 def dish_details_view(request, dish_id):

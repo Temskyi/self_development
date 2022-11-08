@@ -16,10 +16,15 @@ class RegisterUser(CreateView):
         context['title'] = 'Регистрация'
         return context
 
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            message='Введены неверные данные.'))
+
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('habits_tracker_index')
+        return redirect('users_index')
 
 
 class LoginUser(LoginView):
@@ -28,14 +33,22 @@ class LoginUser(LoginView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Авторизация'
         return context
 
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            message='Неверное имя пользователя и / или пароль.'))
+
     def get_success_url(self):
-        return reverse_lazy('habits_tracker_index')
+        return reverse_lazy('users_index')
 
 
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+def users_index(request):
+    return render(request, 'users/users_index.html')
 

@@ -3,11 +3,6 @@
 {% block content %}
 
 <div style="margin-top: 50px;" class="ui container">
-    <div style="margin-bottom: 50px;">
-        <a class="ui red right floated button" href="{% url 'logout' %}">Выйти</a>
-        <p class="ui basic right floated button">{{user.username}}</p>
-    </div>
-    <br>
     <h1 class="ui center aligned header">Трекер привычек</h1>
     <h3 class="test_style">Управляй своими привычками!</h3>
     <form class="ui form" action="{% url 'add' %}" method="post">
@@ -17,7 +12,6 @@
             <input type="text" name="name" placeholder="Введите название привычки"><br>
         </div>
         <button class="ui teal basic button" type="submit">Добавить</button>
-        <a class="ui blue right floated primary button" href="{% url 'statistic' %}">Статистика</a>
     </form>
 
 

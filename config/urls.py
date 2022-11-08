@@ -18,12 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 from config import settings
-from users.views import LoginUser, RegisterUser, logout_user
+from users.views import LoginUser, RegisterUser, logout_user, users_index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('logout/', logout_user, name='logout'),
     path('login/', LoginUser.as_view(), name='login'),
+    path('', users_index, name='users_index'),
     path('register/', RegisterUser.as_view(), name='register'),
     path('habits-tracker/', include('habits_tracker.urls')),
     path('calorie-tracker/', include('calorie_tracker.urls')),

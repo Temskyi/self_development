@@ -1,28 +1,63 @@
 {% extends 'users/users_base.html' %}
 
+{% block title %}Self-Development | Login{% endblock %}
+
 {% block content %}
 
 
-<section class="registration">
-<div class="container">
-    <div class="registration__title"><h1>{{title}}</h1></div>
-
-    <form class="ui form" method="post">
-    {% csrf_token %}
-
-    <div class="field error">{{ form.non_field_errors }}</div>
-
-{% for f in form %}
-        <div class="field">
-            <p><label for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+        <div class='d-flex justify-content-center'>
+            <h3>Авторизация</h3>
         </div>
-        <div class="field error">{{ f.errors }}</div>
-{% endfor %}
 
-    <button style="width:130px;" class="ui button left floated" type="submit">Войти</button>
-    <a href="{% url 'register' %}" style="width:130px;"  class="ui button right floated">Регистрация</a>
-    </form>
+        {% if message %}
+            <div style="color:red;">{{ message }}</div>
+        {% endif %}
+
+        <div class='row'>
+            <div class='col-lg-6 offset-lg-3'>
+                <div class='card bg-secondary mb-3'>
+                    <div class='card-body'>
+
+                        <div class='form-group'>
+
+                            <form action="{% url 'login' %}" method='post'>
+                                {% csrf_token %}
+                                <div class='form-group'>
+                                    <label for='inputUsername' class='form-label mt-4'>
+                                        Имя пользователя
+                                    </label>
+                                    <input type='text' name='username' class='form-control' id='inputUsername' placeholder='Введите имя' autofocus>
+                                </div>
+
+                                <div class='form-group'>
+                                    <label for='inputPassword1' class='form-label mt-4'>
+                                        Пароль
+                                    </label>
+                                    <input type='password' name='password' class='form-control' id='inputPassword1' placeholder='Введите пароль'>
+                                </div>
+
+                                <div class='form-group mt-4'>
+                                    <button type='submit' class='btn btn-primary'>
+                                        Авторизоваться
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div class='mt-2'>
+                                Еще нет аккаунта? <a href="{% url 'register' %}" type='button' class='btn btn-link'>
+                                    Регистрирация здесь
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
-</section>
 
 {% endblock content %}
