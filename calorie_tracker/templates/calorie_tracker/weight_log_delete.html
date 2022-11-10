@@ -1,0 +1,36 @@
+{% extends 'calorie_tracker/calorie_tracker_base.html' %}
+
+{% block title %}Food Tracker | Журнал веса{% endblock %}
+
+{% block body %}
+<div class='py-4 bg-light mt-auto'>
+    <div class='container-fluid px-4'>
+
+        <h3>Журнал веса</h3>
+
+            <div class='row justify-content-center'>
+                <div class='col-xl-12'>
+                    <div class='card bg-secondary mb-3'>
+                        <div class='card-body'>
+    
+                            <div class='form-group'>
+                                <form method='POST'>
+                                    {% csrf_token %}
+
+                                    Вы уверены, что хотите удалить эту запись?
+                                    <button type='submit' class='btn btn-primary'>
+                                        Удалить
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>
+{% endblock %}

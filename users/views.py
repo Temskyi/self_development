@@ -1,30 +1,61 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView
 from .forms import *
+from .models import CustomUser
+from django.db import IntegrityError
 
 
-class RegisterUser(CreateView):
-    form_class = RegisterUserForm
-    template_name = 'users/register.html'
-    success_url = reverse_lazy('index')
+def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Регистрация'
-        return context
+        # Ensure password matches confirmation
+        password = request.POST['password']
+        confirmation = request.POST['confirmation']
+        if password != confirmation:
+            return render(request, 'users/register.html', {
+                'message': 'Passwords must match.',
+            })
 
-    def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(
-            form=form,
-            message='Введены неверные данные.'))
+        # Attempt to create new user
+        try:
+            user = CustomUser.objects.create_user(username, email, password)
+            user.save()
+        except IntegrityError:
+            return render(request, 'users/register.html', {
+                'message': 'Username already taken.',
+            })
+        login(request, user)
+        return HttpResponseRedirect(reverse('users_index'))
+    else:
+        return render(request, 'users/register.html')
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('users_index')
+
+
+# class RegisterUser(CreateView):
+#     form_class = RegisterUserForm
+#     template_name = 'users/register.html'
+#     success_url = reverse_lazy('index')
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = 'Регистрация'
+#         return context
+#
+#     def form_invalid(self, form):
+#         return self.render_to_response(self.get_context_data(
+#             form=form,
+#             message='Введены неверные данные.'))
+#
+#     def form_valid(self, form):
+#         user = form.save()
+#         login(self.request, user)
+#         return redirect('users_index')
 
 
 class LoginUser(LoginView):

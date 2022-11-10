@@ -1,0 +1,28 @@
+{% extends 'calorie_tracker/calorie_tracker_base.html' %}
+{% load static %}
+{% block title %}Food Tracker | {{ title }}{% endblock %}
+
+{% block body %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+
+        <h3>{{ title }}</h3>
+
+        <div class='row justify-content-center'>
+
+            {% for day in days %}
+            <div class="card" style="margin-bottom:15px">
+                <h5 class="card-header">Питание за {{ day.day }}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Всего калорий: {{ day.total_calories }}</h5>
+                    <h5 class="card-title">Всего белков: {{ day.total_protein }}</h5>
+                    <h5 class="card-title">Всего жиров: {{ day.total_fat }}</h5>
+                    <h5 class="card-title">Всего углеводов: {{ day.total_carbohydrates }}</h5>
+                    <a href="{% url 'day_history_meals' day_id=day.id %}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+    {% endblock %}

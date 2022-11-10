@@ -1,0 +1,42 @@
+{% extends 'calorie_tracker/calorie_tracker_base.html' %}
+{% load static %}
+{% block title %}Food Tracker | {{ title }}{% endblock %}
+
+{% block body %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+
+        <h3>{{ title }}</h3>
+
+        <div class="card text-center" style="margin-bottom:50px">
+                <h5 class="card-header">За сегодня приемов пищи: {{ meals|length }}</h5>
+                <h5 class="card-header">Всего калорий: {{ total_calories }}<br>
+                    Всего белков: {{ total_protein }}<br>
+                    Всего жиров: {{ total_fat }}<br>
+                    Всего углеводов: {{ total_carbohydrates }}<br>
+                </h5>
+                <div class="card-body">
+                    <a href="{% url 'add_meal' %}" class="btn btn-primary">Добавить новый прием пищи</a>
+                </div>
+            </div>
+
+        <div class='row justify-content-center'>
+
+            {% for meal in meals %}
+            <div class="card" style="margin-bottom:15px">
+                <h5 class="card-header">Прием пищи {{ meal.meal_time_create }}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Всего калорий: {{ meal.total_calories }}</h5>
+                    <h5 class="card-title">Всего белков: {{ meal.total_protein }}</h5>
+                    <h5 class="card-title">Всего жиров: {{ meal.total_fat }}</h5>
+                    <h5 class="card-title">Всего углеводов: {{ meal.total_carbohydrates }}</h5>
+                    <a href="{% url 'meal_details' meal_id=meal.id %}" class="btn btn-primary">Подробнее</a>
+                    <a href="{% url 'delete_meal' meal_id=meal.id %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+    {% endblock %}

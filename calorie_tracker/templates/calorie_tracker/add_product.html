@@ -1,0 +1,90 @@
+{% extends 'calorie_tracker/calorie_tracker_base.html' %}
+
+{% block title %}Food Tracker | Добавить продукт{% endblock %}
+
+{% block body %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+
+        {% if success %}
+            <br>
+            <div class='alert alert-dismissible alert-success' role='alert'>
+                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+                Новый продукт успешно добавлен.
+            </div>
+
+            <div class='d-flex justify-content-center'>
+                <h3>Добавить продукт</h3>
+            </div>
+            <div class='d-flex justify-content-center'>
+                <p>Введите информацию о новом продукте</p>
+            </div>
+
+                <div class='row'>
+                    <div class='col-lg-6 offset-lg-3'>
+                        <div class='card bg-secondary mb-3'>
+                            <div class='card-body'>
+
+                                <div class='form-group'>
+                                    <form action="{% url 'add_product' meal_id=meal_id %}" method='POST' enctype='multipart/form-data'>
+                                        {% csrf_token %}
+                                        <div class="form-error">{{ form.non_field_errors }}</div>
+
+                                        <div class='form-group'>
+                                            {{ product_form.as_p }}
+
+                                            <button type='submit' class='btn btn-primary'>Сохранить</button>
+                                            <a href="{% url 'meal_details' meal_id=meal_id %}" class='btn btn-outline-dark'>Назад</a>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        {% else %}
+        {% if fail %}
+            <br>
+            <div class='alert alert-dismissible alert-danger' role='alert'>
+                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+                Произошла ошибка при попытке добавить продукт.
+                Проверьте правильность данных.
+            </div>
+        {% endif %}
+            <div class='d-flex justify-content-center'>
+                <h3>Добавить продукт</h3>
+            </div>
+            <div class='d-flex justify-content-center'>
+                <p>Введите информацию о новом продукте</p>
+            </div>
+            
+                <div class='row'>
+                    <div class='col-lg-6 offset-lg-3'>
+                        <div class='card bg-secondary mb-3'>
+                            <div class='card-body'>
+    
+                                <div class='form-group'>
+                                    <form action="{% url 'add_product' meal_id=meal_id %}" method='POST' enctype='multipart/form-data'>
+                                        {% csrf_token %}
+                                        <div class="form-error">{{ form.non_field_errors }}</div>
+
+                                        <div class='form-group'>
+                                            {{ product_form.as_p }}
+
+                                            <button type='submit' class='btn btn-primary'>Сохранить</button>
+                                            <a href="{% url 'meal_details' meal_id=meal_id %}" class='btn btn-outline-dark'>Назад</a>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
