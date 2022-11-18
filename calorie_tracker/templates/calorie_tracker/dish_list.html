@@ -12,7 +12,8 @@
 
         {% for dish in dishes %}
             <div class='col-sm-12 col-md-12 col-lg-4 col-xl-3 d-flex align-items-stretch'>
-                <div class='card bg-secondary mb-3'>
+                <div class="card-group">
+                <div class='card bg-secondary mb-3 text-center'>
 
                     <!-- Food image -->
                     {% if dish.image %}
@@ -44,16 +45,15 @@
                                 <strong>{{ dish.calories }} calories</strong> in 100 grams
                             </div>
                         </p>
+                        </div>
+                        <div class="card-footer">
+                        <a href="{% url 'dish_details' dish.id %}" type='button' class='btn btn-primary' style="margin-top:auto;">
+                            Подробнее
+                        </a>
 
-                        <p class='card-text'>
-                            <div class='my-3'>
-                                <a href="{% url 'dish_details' dish.id %}" type='button' class='btn btn-link'>
-                                    Подробнее
-                                </a>
-                            </div>
-                        </p>
+
                     </div>
-
+                    </div>
                 </div>
             </div>
 

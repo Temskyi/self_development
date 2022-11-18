@@ -1,7 +1,7 @@
 {% extends 'workout_tracker/workout_tracker_base.html' %}
 {% load static %}
 {% load get_index %}
-{% block title %}Workout Journal{% endblock %}
+{% block title %}Workout Journal | Подходы{% endblock %}
 
 {% block head %}
 <link href='{% static "workout_tracker/css/bg_image.css" %}'
@@ -120,7 +120,7 @@
                         <br>
                         <div class="collapse" id="target{{ set.id }}" style="max-width:200px;margin-right:auto;">
                             <div class="card card-body" style="margin-right:auto;">
-                                <form action="{% url 'update_set' workout_id=workout_id set_id=set.id %}"
+                                <form action="{% url 'update_set' workout_id=workout_id set_id=set.id exercise_id=exercise.id %}"
                                       method='POST' style="margin-right:auto;">
                                     {% csrf_token %}
                                     <div class='form-group'>

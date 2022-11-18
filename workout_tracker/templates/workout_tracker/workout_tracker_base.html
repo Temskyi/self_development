@@ -64,7 +64,7 @@
                     </a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link' href="#">
+                    <a class='nav-link' href="{% url 'workout_history' %}">
                         <i class='fas fa-solid fa-clock-rotate-left'></i> История
                     </a>
                 </li>
@@ -72,6 +72,11 @@
             </ul>
 
             <ul class='navbar-nav ms-auto'>
+                <li class='nav-item'>
+                    <a class='nav-link' href="{% url 'users_index' %}">
+                        <i class='fas fa-gem'></i> На главную
+                    </a>
+                </li>
                 {% if user.is_authenticated %}
                 <li class='nav-item'>
                     <a class='nav-link' href="{% url 'logout' %}">

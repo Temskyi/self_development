@@ -13,7 +13,7 @@
 
         {% for exercise in exercises %}
             <div class='col-sm-12 col-md-12 col-lg-4 col-xl-3 d-flex align-items-stretch'>
-                <div class='card bg-secondary mb-3'>
+                <div class='card bg-secondary mb-3 text-center'>
 
 
                     {% if exercise.image %}
@@ -43,6 +43,10 @@
                                 Группы мышц: <strong>{% for group in exercise.muscle_groups.all %}{{ group.name }} {% endfor %}</strong>
                             </div>
                         </p>
+
+                        {% if exercise.creator.id == user_id %}
+                        <a href="#" class="btn btn-danger mx-auto">Удалить</a>
+                        {% endif %}
 
                     </div>
 

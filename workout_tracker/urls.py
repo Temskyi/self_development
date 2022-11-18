@@ -13,6 +13,7 @@ urlpatterns = [
     path('today_workout/add_workout/', add_workout, name='add_workout'),
     path('today_workout/delete_workout/<int:workout_id>/', delete_workout, name='delete_workout'),
     path('today_workout/<int:workout_id>/set_delete/<int:set_id>/<int:exercise_id>/', workout_delete_set, name='delete_set'),
-    path('today_workout/<int:workout_id>/set_update/<int:set_id>/', update_set, name='update_set'),
+    path('today_workout/<int:workout_id>/set_update/<int:set_id>/<int:exercise_id>/', update_set, name='update_set'),
 
+    path('workout_history/', workout_history, name='workout_history')
 ]

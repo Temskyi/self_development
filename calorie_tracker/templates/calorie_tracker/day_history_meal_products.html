@@ -20,7 +20,10 @@
                     Всего жиров: {{ total_fat }}<br>
                     Всего углеводов: {{ total_carbohydrates }}<br>
                 </h5>
-            </div>
+                <div class="card-body">
+                <a href="/calorie-tracker/history/{{day_id}}/" class='btn btn-primary'>Назад</a>
+                </div>
+        </div>
 
         <div class='row justify-content-center'>
 
@@ -33,7 +36,7 @@
                     <h5 class="card-title">Белков: {{ product.protein }}</h5>
                     <h5 class="card-title">Жиров: {{ product.fat }}</h5>
                     <h5 class="card-title">Углеводов: {{ product.carbohydrates }}</h5>
-                    <a href="/calorie-tracker/history/{{day_id}}/" class='btn btn-primary'>Назад</a>
+
                 </div>
             </div>
 

@@ -22,6 +22,7 @@ class ExerciseList(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Список пражнений'
+        context['user_id'] = self.request.user.id
         return context
 
     def get_queryset(self):
@@ -59,6 +60,7 @@ class TodayWorkout(LoginRequiredMixin, ListView):
     model = Workout
     template_name = 'workout_tracker/today_workout.html'
     context_object_name = 'workouts'
+    login_url = '/login/'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -169,14 +171,14 @@ def workout_delete_set(request, workout_id, set_id, exercise_id):
 
 
 @login_required
-def update_set(request, workout_id, set_id):
+def update_set(request, workout_id, set_id, exercise_id):
     set = Set.objects.get(id=set_id)
     weight = request.POST['weight']
     reps = request.POST['reps']
     set.weight = weight
     set.reps = reps
     set.save()
-    return HttpResponseRedirect(f'/workout-tracker/today_workout/{workout_id}/')
+    return HttpResponseRedirect(f'/workout-tracker/today_workout/{workout_id}/#{exercise_id}')
 
 
 @login_required
@@ -190,3 +192,12 @@ def delete_workout(request, workout_id):
     workout = Workout.objects.get(id=workout_id)
     workout.delete()
     return HttpResponseRedirect(f'/workout-tracker/today_workout/')
+
+
+@login_required
+def workout_history(request):
+    workouts = Workout.objects.filter(user=request.user).order_by('-id')
+    return render(request, 'workout_tracker/workout_history.html',{
+        'workouts': workouts,
+    })
+

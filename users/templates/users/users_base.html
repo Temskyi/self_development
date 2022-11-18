@@ -1,108 +1,112 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang='en'>
-    <head>
-        <meta charset='utf-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-        <title>{% block title %}Self-Development{% endblock %}</title>
-        <link rel='icon' type='image/x-icon' href='{% static "images/favicon.ico" %}'>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport'
+          content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+    <title>{% block title %}Self-Development{% endblock %}</title>
+    <link rel='icon' type='image/x-icon'
+          href='{% static "images/favicon.ico" %}'>
 
-        <!-- Icons -->
-        <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css' rel='stylesheet'>
+    <!-- Icons -->
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css'
+          rel='stylesheet'>
 
-        <!-- Fonts -->
-        <link href='https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap' rel='stylesheet'>
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap'
+          rel='stylesheet'>
 
-        <!-- Bootstrap CSS -->
-        <link href='{% static "users/css/bootstrap.min.css" %}' rel='stylesheet'>
+    <!-- Bootstrap CSS -->
+    <link href='{% static "users/css/bootstrap.min.css" %}' rel='stylesheet'>
 
-        <!-- Custom styles -->
-        <link href='{% static "users/css/styles.css" %}' rel='stylesheet'>
-    </head>
+    <!-- Custom styles -->
+    <link href='{% static "users/css/styles.css" %}' rel='stylesheet'>
+</head>
 
-    <body>
+<body>
 
-        <nav class='navbar navbar-expand-lg navbar-dark bg-primary'>
-            <div class='container-fluid'>
-                <a class='navbar-brand' href="#">
-                    <i class='fas fa-regular fa-gem fa-2xl'></i> Self-Development
-                </a>
-                <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarColor' aria-controls='navbarColor' aria-expanded='false' aria-label='Toggle navigation'>
-                    <span class='navbar-toggler-icon'></span>
-                </button>
+<nav class='navbar navbar-expand-lg navbar-dark bg-primary'>
+    <div class='container-fluid'>
+        <a class='navbar-brand' href="#">
+            <i class='fas fa-regular fa-gem fa-2xl'></i> Self-Development
+        </a>
+        <button class='navbar-toggler' type='button' data-bs-toggle='collapse'
+                data-bs-target='#navbarColor' aria-controls='navbarColor'
+                aria-expanded='false' aria-label='Toggle navigation'>
+            <span class='navbar-toggler-icon'></span>
+        </button>
 
-                <div class='collapse navbar-collapse' id='navbarColor'>
-                    <ul class='navbar-nav me-auto'>
-                        <li class='nav-item'>
-                            <a class='nav-link' href="{% url 'calorie_counter_index' %}">
-                                <i class='fas fa-solid fa-utensils'></i> Calorie Counter
-                            </a>
-                        </li>
+        <div class='collapse navbar-collapse' id='navbarColor'>
+            <ul class='navbar-nav me-auto'>
+                <li class='nav-item'>
+                    <a class='nav-link'
+                       href="{% url 'calorie_counter_index' %}">
+                        <i class='fas fa-solid fa-utensils'></i> Calorie
+                        Counter
+                    </a>
+                </li>
 
-                        <li class='nav-item'>
-                            <a class='nav-link' href="{% url 'habits_tracker_index' %}">
-                                <i class='fas fa-solid fa-book'></i> Habit Tracker
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a class='nav-link' href="{% url 'today_workout' %}">
-                                <i class='fas fa-solid fa-dumbbell'></i> Workout Journal
-                            </a>
-                        </li>
+                <li class='nav-item'>
+                    <a class='nav-link'
+                       href="{% url 'habits_tracker_index' %}">
+                        <i class='fas fa-solid fa-book'></i> Habit Tracker
+                    </a>
+                </li>
+                <li class='nav-item'>
+                    <a class='nav-link' href="{% url 'today_workout' %}">
+                        <i class='fas fa-solid fa-dumbbell'></i> Workout
+                        Journal
+                    </a>
+                </li>
 
-                    </ul>
+            </ul>
 
-                    <ul class='navbar-nav ms-auto'>
-                        {% if user.is_authenticated %}
-                        <li class='nav-item dropdown'>
-                            <a class='nav-link dropdown-toggle' data-bs-toggle='dropdown' href='#' role='button' aria-haspopup='true' aria-expanded='false'>
-                                <i class='fas fa-user fa-fw fa-lg'></i>
-                            </a>
-                            <div class='dropdown-menu dropdown-menu-end'>
-                                <a class='dropdown-item' href="/calorie-tracker/profile/weight/">
-                                    <i class='fas fa-user'></i> Профиль
-                                </a>
-                                <div class='dropdown-divider'></div>
-                                <a class='dropdown-item' href="{% url 'logout' %}">
-                                    <i class='fas fa-sign-out-alt'></i> Выйти
-                                </a>
-                            </div>
-                        </li>
-                        {% else %}
-                        <li class='nav-item'>
-                            <a class='nav-link' href="{% url 'login' %}">
-                                <i class='fas fa-sign-in-alt'></i> Войти
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a class='nav-link' href="{% url 'register' %}">
-                                <i class='fas fa-user-plus'></i> Регистрация
-                            </a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
+            <ul class='navbar-nav ms-auto'>
+                {% if user.is_authenticated %}
+                <li class='nav-item'>
+                    <a class='nav-link' href="{% url 'logout' %}">
+                        <i class='fas fa-sign-out-alt'></i> Выйти
+                    </a>
+                </li>
+                {% else %}
+                <li class='nav-item'>
+                    <a class='nav-link' href="{% url 'login' %}">
+                        <i class='fas fa-sign-in-alt'></i> Авторизация
+                    </a>
+                </li>
+                <li class='nav-item'>
+                    <a class='nav-link' href="{% url 'register' %}">
+                        <i class='fas fa-user-plus'></i> Регистрация
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-        <main>
-            <div class='container'>
-                {% block content %}
-                {% endblock %}
-            </div>
-        </main>
-
-        <footer class='py-4'>
-            <div class='d-flex align-items-center justify-content-center'>
-                <div class='text-center'>
-                    Copyright &copy; <script>document.write(new Date().getFullYear())</script> Artem Moskalenko.
-                </div>
-            </div>
-        </footer>
-
-        {% block script %}
-        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'></script>
+<main>
+    <div class='container'>
+        {% block content %}
         {% endblock %}
+    </div>
+</main>
 
-    </body>
+<footer class='py-4'>
+    <div class='d-flex align-items-center justify-content-center'>
+        <div class='text-center'>
+            Copyright &copy;
+            <script>document.write(new Date().getFullYear())</script>
+            Artem Moskalenko.
+        </div>
+    </div>
+</footer>
+
+{% block script %}
+<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'></script>
+{% endblock %}
+
+</body>
 </html>

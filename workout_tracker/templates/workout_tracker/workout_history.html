@@ -1,6 +1,6 @@
 {% extends 'workout_tracker/workout_tracker_base.html' %}
 {% load static %}
-{% block title %}Workout Journal | Тренировки за сегодня{% endblock %}
+{% block title %}Workout Journal | История{% endblock %}
 
 {% block head %}
 <link href='{% static "workout_tracker/css/bg_image.css" %}'
@@ -10,14 +10,6 @@
 {% block body %}
 <div class='py-4 mt-auto'>
     <div class='container px-4'>
-
-        <div class="card text-center" style="margin-bottom:50px">
-                <h5 class="card-header">За сегодня тренировок: {{ workouts|length }}</h5>
-                <div class="card-body">
-                    <a href="{% url 'add_workout' %}" class="btn btn-primary">Начать новую тренировку</a>
-                </div>
-            </div>
-
         <div class='row justify-content-center'>
 
             {% for workout in workouts %}

@@ -71,6 +71,11 @@
             </ul>
 
             <ul class='navbar-nav ms-auto'>
+                <li class='nav-item'>
+                    <a class='nav-link' href="{% url 'users_index' %}">
+                        <i class='fas fa-gem'></i> На главную
+                    </a>
+                </li>
                 {% if user.is_authenticated %}
                     {% if profile %}
                         <li class='nav-item'>
