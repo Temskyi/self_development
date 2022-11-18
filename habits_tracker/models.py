@@ -22,7 +22,7 @@ class Habits(models.Model):
 class Tracking(models.Model):
     """Привычки за день"""
     habit = models.ForeignKey(
-        "Habits",
+        Habits,
         on_delete=models.CASCADE,
     )
     is_completed = models.BooleanField('Завершено', default=False)

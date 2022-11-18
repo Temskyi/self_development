@@ -1,0 +1,92 @@
+{% extends 'workout_tracker/workout_tracker_base.html' %}
+{% load static %}
+{% block title %}Workout Journal{% endblock %}
+
+
+{% block body %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+
+        <h3>{{ title }}</h3>
+
+        <div class='row justify-content-center'>
+
+        {% for exercise in exercises %}
+            <div class='col-sm-12 col-md-12 col-lg-4 col-xl-3 d-flex align-items-stretch'>
+                <div class='card bg-secondary mb-3'>
+
+
+                    {% if exercise.image %}
+                    <a href='#'>
+                        <img
+                            src="{{ exercise.image.url }}"
+                            class='img-fluid'
+                            alt='exercise image'
+                        >
+                    </a>
+                    {% else %}
+                    <a href='#'>
+                        <img
+                            src="{% static 'workout_tracker/images/no_image.png' %}"
+                            class='img-fluid'
+                            alt='exercise image'
+                        >
+                    </a>
+                    {% endif %}
+                    <div class='card-body'>
+                        <h4 class='card-title'>
+                            <strong>{{ exercise.name }}</strong>
+                        </h4>
+
+                        <p class='card-text'>
+                            <div class='my-3'>
+                                Группы мышц: <strong>{% for group in exercise.muscle_groups.all %}{{ group.name }} {% endfor %}</strong>
+                            </div>
+                        </p>
+
+                    </div>
+
+                </div>
+            </div>
+
+        {% endfor %}
+
+        {% if page_obj.has_other_pages %}
+            <div class='d-flex justify-content-center'>
+                <ul class='pagination'>
+                    {% if page_obj.has_previous %}
+                        <li class='page-item'>
+                            <a class='page-link' href='?page={{ page_obj.previous_page_number }}'>&laquo;</a>
+                        </li>
+                    {% else %}
+                        <li class='page-item disabled'>
+                            <a class='page-link' href='#'>&laquo;</a>
+                        </li>
+                    {% endif %}
+                    {% for p in paginator.page_range %}
+                        {% if page_obj.number == p %}
+                            <li class='page-item active'>
+                                <a class='page-link' href='#'>{{ p }}</a>
+                            </li>
+                        {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                            <li class='page-item'>
+                                <a class='page-link' href='?page={{ p }}'>{{ p }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class='page-item'>
+                            <a class='page-link' href='?page={{ page_obj.next_page_number }}'>&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class='page-item disabled'>
+                            <a class='page-link' href='#'>&raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

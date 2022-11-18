@@ -1,0 +1,37 @@
+{% extends 'workout_tracker/workout_tracker_base.html' %}
+{% load static %}
+{% block title %}Workout Journal{% endblock %}
+
+{% block head %}
+<link href='{% static "workout_tracker/css/bg_image.css" %}'
+          rel='stylesheet'>
+{% endblock %}
+
+{% block body %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+
+        <div class="card text-center" style="margin-bottom:50px">
+                <h5 class="card-header">За сегодня тренировок: {{ workouts|length }}</h5>
+                <div class="card-body">
+                    <a href="{% url 'add_workout' %}" class="btn btn-primary">Начать новую тренировку</a>
+                </div>
+            </div>
+
+        <div class='row justify-content-center'>
+
+            {% for workout in workouts %}
+            <div class="card" style="margin-bottom:15px">
+                <h5 class="card-header">Тренировка {{ workout.time }}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Группы мышц: {% for group in workout.muscle_groups.all %}{{ group.name }} {% endfor %}</h5>
+                    <a href="{% url 'today_workout_details' workout_id=workout.id %}" class="btn btn-primary">Подробнее</a>
+                    <a href="{% url 'delete_workout' workout_id=workout.id %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

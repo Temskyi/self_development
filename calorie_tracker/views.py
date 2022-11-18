@@ -284,7 +284,6 @@ def weight_log_view(request):
             user_weight_log = Weight.objects.filter(user=request.user)
             custom_user = CustomUser.objects.get(id=request.user.id)
             user_weight = f'{int(custom_user.user_weight // 1)}.{int(str(custom_user.user_weight % 1)[2:4])}'
-            print(user_weight)
             return render(request, 'calorie_tracker/user_profile.html', {
                 'user_weight_log': user_weight_log,
                 'profile': True,
@@ -298,7 +297,6 @@ def weight_log_view(request):
     user_weight_log = Weight.objects.filter(user=request.user)
     custom_user = CustomUser.objects.get(id=request.user.id)
     user_weight = f'{int(custom_user.user_weight // 1)}.{int(str(custom_user.user_weight % 1)[2:4])}'
-    print(user_weight)
 
     return render(request, 'calorie_tracker/user_profile.html', {
         'user_weight_log': user_weight_log,

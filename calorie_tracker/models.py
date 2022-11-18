@@ -49,6 +49,11 @@ class Day(models.Model):
     def __str__(self):
         return str(self.day)
 
+    class Meta:
+        verbose_name = "День"
+        verbose_name_plural = "Дни"
+        ordering = ['id']
+
 
 class Meal(models.Model):
     """Приёмы пищи"""
@@ -66,7 +71,7 @@ class Meal(models.Model):
         on_delete=models.CASCADE
     )
     day = models.ForeignKey(
-        "Day",
+        Day,
         on_delete=models.CASCADE
     )
 
@@ -82,11 +87,11 @@ class Meal(models.Model):
 class Product(models.Model):
     """Продукты, из которых состоят приёмы пищи"""
     dish = models.ForeignKey(
-        "Dish",
+        Dish,
         on_delete=models.CASCADE,
     )
     meal = models.ForeignKey(
-        "Meal",
+        Meal,
         on_delete=models.CASCADE,
     )
     weight = models.IntegerField()

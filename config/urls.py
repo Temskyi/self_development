@@ -28,6 +28,7 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('habits-tracker/', include('habits_tracker.urls')),
     path('calorie-tracker/', include('calorie_tracker.urls')),
+    path('workout-tracker/', include('workout_tracker.urls'))
 ]
 
 if settings.DEBUG:

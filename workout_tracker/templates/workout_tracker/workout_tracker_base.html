@@ -5,7 +5,7 @@
     <meta charset='utf-8'>
     <meta name='viewport'
           content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-    <title>{% block title %}Calorie Tracker{% endblock %}</title>
+    <title>{% block title %}Workout Tracker{% endblock %}</title>
     <link rel='icon' type='image/x-icon'
           href='{% static "images/favicon.ico" %}'>
 
@@ -18,12 +18,13 @@
           rel='stylesheet'>
 
     <!-- Bootstrap CSS -->
-    <link href='{% static "calorie_tracker/css/bootstrap.min.css" %}'
+    <link href='{% static "workout_tracker/css/bootstrap.min.css" %}'
           rel='stylesheet'>
 
     <!-- Custom styles -->
-    <link href='{% static "calorie_tracker/css/styles.css" %}'
+    <link href='{% static "workout_tracker/css/styles.css" %}'
           rel='stylesheet'>
+
     {% block head %}
     {% endblock %}
 </head>
@@ -32,8 +33,8 @@
 
 <nav class='navbar navbar-expand-lg navbar-dark bg-primary'>
     <div class='container-fluid'>
-        <a class='navbar-brand' href="{% url 'calorie_counter_index' %}">
-            <i class='fas fa-solid fa-burger fa-2xl'></i> Calorie Tracker
+        <a class='navbar-brand' href="{% url 'today_workout' %}">
+            <i class='fas fa-regular fa-dumbbell fa-2xl'></i> Workout Journal
         </a>
         <button class='navbar-toggler' type='button' data-bs-toggle='collapse'
                 data-bs-target='#navbarColor' aria-controls='navbarColor'
@@ -45,25 +46,25 @@
             <ul class='navbar-nav me-auto'>
                 <li class='nav-item'>
                     <a class='nav-link'
-                       href="{% url 'calorie_counter_index' %}">
-                        <i class='fas fa-list'></i> Список блюд
+                       href="{% url 'exercise_list' %}">
+                        <i class='fas fa-list'></i> Список упражнений
                     </a>
                 </li>
 
 
                 {% if user.is_authenticated %}
                 <li class='nav-item'>
-                    <a class='nav-link' href="{% url 'dish_add' %}">
-                        <i class='far fa-plus-square'></i> Добавить своё блюдо
+                    <a class='nav-link' href="{% url 'add_exercise' %}">
+                        <i class='far fa-plus-square'></i> Добавить своё упражнение
                     </a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link' href="{% url 'today_meals' %}">
-                        <i class='fas fa-utensils'></i> Приемы пищи
+                    <a class='nav-link' href="{% url 'today_workout' %}">
+                        <i class='fas fa-fire-flame-curved'></i> Тренировки
                     </a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link' href="{% url 'days_history' %}">
+                    <a class='nav-link' href="#">
                         <i class='fas fa-solid fa-clock-rotate-left'></i> История
                     </a>
                 </li>
@@ -72,30 +73,11 @@
 
             <ul class='navbar-nav ms-auto'>
                 {% if user.is_authenticated %}
-                    {% if profile %}
-                        <li class='nav-item'>
-                            <a class='nav-link' href="{% url 'logout' %}">
-                                <i class='fas fa-sign-out-alt'></i> Выйти
-                            </a>
-                        </li>
-                    {% else %}
-                <li class='nav-item dropdown'>
-                    <a class='nav-link dropdown-toggle'
-                       data-bs-toggle='dropdown' href='#' role='button'
-                       aria-haspopup='true' aria-expanded='false'>
-                        <i class='fas fa-user fa-fw fa-lg'></i>
+                <li class='nav-item'>
+                    <a class='nav-link' href="{% url 'logout' %}">
+                        <i class='fas fa-sign-out-alt'></i> Выйти
                     </a>
-                    <div class='dropdown-menu dropdown-menu-end'>
-                        <a class='dropdown-item' href="/calorie-tracker/profile/weight/">
-                            <i class='fas fa-user'></i> Профиль
-                        </a>
-                        <div class='dropdown-divider'></div>
-                        <a class='dropdown-item' href="{% url 'logout' %}">
-                            <i class='fas fa-sign-out-alt'></i> Выйти
-                        </a>
-                    </div>
                 </li>
-                    {% endif %}
                 {% else %}
                 <li class='nav-item'>
                     <a class='nav-link' href="{% url 'login' %}">

@@ -1,0 +1,195 @@
+{% extends 'workout_tracker/workout_tracker_base.html' %}
+{% load static %}
+{% load get_index %}
+{% block title %}Workout Journal{% endblock %}
+
+{% block head %}
+<link href='{% static "workout_tracker/css/bg_image.css" %}'
+          rel='stylesheet'>
+{% endblock %}
+
+{% block body %}
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+
+        <div class="card text-center" style="margin-bottom:50px;max-width: 1200px;">
+            <h5 class="card-header">Упражнений: {{ exercises_dct.values |length }}</h5>
+            <h5 class="card-header">Всего подходов: {{ sets_count }}</h5>
+            <form action="{% url 'today_workout_details' workout_id=workout_id %}"
+                  method='POST'>
+                {% csrf_token %}
+                <div class='form-group'>
+                    <div class='row'
+                         style="max-width:40%;margin-left:auto;margin-right:auto;">
+                        <div class='mb-3'>
+                            <label for='exercise' class='form-label mt-2'>
+                                Упражнение
+                            </label>
+                            <select class='form-control' name="exercise"
+                                    id="exercise">
+                                {% for exercise in exercises %}
+                                {% if exercise.name == last_exercise %}
+                                <option value="{{ exercise.name }}"
+                                        selected="selected">
+                                    {{ exercise.name }}
+                                </option>
+                                {% else %}
+                                <option value="{{ exercise.name }}">
+                                    {{ exercise.name }}
+                                </option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class='mb-3'>
+                            <label for='reps' class='form-label mt-2'>
+                                Повторения
+                            </label>
+                            <input
+                                    class='form-control'
+                                    type='number'
+                                    name='reps'
+                                    id='reps'
+                                    placeholder='0' required name='reps'
+                                    min='0'
+                                    value='{{ last_reps }}'
+                                    step='1'
+                                    title='Reps'
+                                    pattern='^\d*(\)?$'
+                            >
+                        </div>
+                        <div class='mb-3'>
+                            <label for='weight' class='form-label mt-2'>
+                                Вес в кг
+                            </label>
+                            <input
+                                    class='form-control'
+                                    type='number'
+                                    name='weight'
+                                    id='weight'
+                                    placeholder='0.0' required name='weight'
+                                    min='0'
+                                    value='{{ last_weight }}'
+                                    step='0.5'
+                                    title='Weight'
+                                    pattern='^\d*(\.\d{0,2})?$'
+                            >
+                        </div>
+                        <div class='mb-3'>
+                            <button type='submit' class='btn btn-primary'>
+                                Добавить подход
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {% if form_error %}
+            <br>
+            <div class='alert alert-dismissible alert-danger' role='alert'>
+                <button type='button' class='btn-close'
+                        data-bs-dismiss='alert'></button>
+                Произошла ошибка при попытке добавить новый подход.
+                Убедитесь, что вы указали все данные правильно.
+            </div>
+            {% endif %}
+        </div>
+
+        {% for exercise, sets in exercises_dct.items %}
+        <div class="card mb-3" style="max-width: 1200px;">
+            <a name="{{ exercise.id }}"></a>
+            <div class="row g-0">
+                <div class="col-md-4">
+                    {% if exercise.image %}
+                    <img src="{{ exercise.image.url }}"
+                         class="img-fluid rounded-start" alt="exercise image">
+                    {% else %}
+                    <img src="{% static 'workout_tracker/images/no_image.png' %}"
+                         class="img-fluid rounded-start" alt="exercise image">
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ exercise.name }}</h3>
+                        {% for set in sets %}
+                        <a class="btn btn-outline-primary"
+                           style="min-width:200px"
+                           data-bs-toggle="collapse" href="#"
+                           data-bs-target="#target{{ set.id }}">
+                            Подход {{ sets|get_index_from_one:set }}: {{ set.get_weight }}х{{ set.reps }}
+                        </a>
+                        <br>
+                        <div class="collapse" id="target{{ set.id }}" style="max-width:200px;margin-right:auto;">
+                            <div class="card card-body" style="margin-right:auto;">
+                                <form action="{% url 'update_set' workout_id=workout_id set_id=set.id %}"
+                                      method='POST' style="margin-right:auto;">
+                                    {% csrf_token %}
+                                    <div class='form-group'>
+                                        <div class='row'
+                                             style="margin-right:auto;">
+                                            <div class='mb-1'>
+                                                <label for='reps'
+                                                       class='form-label mt-2'>
+                                                    Повторения
+                                                </label>
+                                                <input
+                                                        class='form-control form-control-sm'
+                                                        style="max-width:135px"
+                                                        type='number'
+                                                        name='reps'
+                                                        id='reps'
+                                                        placeholder='0'
+                                                        required name='reps'
+                                                        min='0'
+                                                        value='{{ set.reps }}'
+                                                        step='1'
+                                                        title='Reps'
+                                                        pattern='^\d*(\)?$'
+                                                >
+                                            </div>
+                                            <div class='mb-1'>
+                                                <label for='weight'
+                                                       class='form-label mt-2'>
+                                                    Вес в кг
+                                                </label>
+                                                <input
+                                                        class='form-control form-control-sm'
+                                                        style="max-width:135px"
+                                                        type='number'
+                                                        name='weight'
+                                                        id='weight'
+                                                        placeholder='0.0'
+                                                        required name='weight'
+                                                        min='0'
+                                                        value='{{ set.get_int_weight }}'
+                                                        step='0.1'
+                                                        title='Weight'
+                                                        pattern='^\d*(\.\d{0,2})?$'
+                                                >
+                                            </div>
+                                            <div class='mb-1' >
+                                                <button type='submit'
+                                                        class='btn btn-primary btn-sm'
+                                                        style="min-width:135px">
+                                                    Изменить
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <a href="{% url 'delete_set' set_id=set.id workout_id=workout_id exercise_id=exercise.id %}">
+                                    <button class='btn btn-danger btn-sm'  style="width:135px">
+                                        Удалить
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

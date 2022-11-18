@@ -30,7 +30,8 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'habits_tracker.apps.HabitsTrackerConfig',
-    'calorie_tracker.apps.CalorieTrackerConfig'
+    'calorie_tracker.apps.CalorieTrackerConfig',
+    'workout_tracker.apps.WorkoutTrackerConfig',
 ]
 
 
