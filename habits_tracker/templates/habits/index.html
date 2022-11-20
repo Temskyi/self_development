@@ -2,34 +2,62 @@
 
 {% block content %}
 
-<div style="margin-top: 50px;margin-bottom:100px" class="ui container">
-    <h1 class="ui center aligned header">Трекер привычек</h1>
-    <h3 class="test_style">Управляй своими привычками!</h3>
-    <form class="ui form" action="{% url 'add' %}" method="post">
-        {% csrf_token %}
-        <div class="field">
-            <label>Новая привычка</label>
-            <input type="text" name="name" placeholder="Введите название привычки"><br>
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
+<h1 class="text-center">Трекер привычек</h1><br>
+            <h5 class="text-center">Управляй своими привычками!</h5>
+
+            <form action="{% url 'add' %}"
+                  method='POST'>
+                {% csrf_token %}
+                <div class='form-group'>
+                    <div class='row'>
+                        <div class='mb-3'>
+                            <label for='name' class='form-label mt-2'>
+                                Новая привычка
+                            </label>
+                            <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Введите название привычки"
+                                    class='form-control'
+                                    id='name'
+                            >
+                        </div>
+                        <div class='mb-3'>
+                            <button class="btn btn-outline-info" type="submit">
+                                Добавить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+        {% for habit in today_habits %}
+        <div class="card mb-2">
+            <a id="{{ habit.habit_id }}"></a>
+            <div class="card-body">
+                <h5 class="card-title">{{ habit.habit }}</h5>
+                {% if habit.is_completed == False %}
+                <button type="button" class="btn btn-secondary mb-3" style="width: 142px!important;" disabled>Не завершено</button>
+                <a class="btn btn-primary mb-3" style="width: 142px!important;"
+                   href="{% url 'update' habit_id=habit.habit_id %}"
+                   role="button">Выполнить</a>
+                {% else %}
+                <button type="button" class="btn btn-success mb-3" style="width: 142px!important;" disabled>
+                    Завершено
+                </button>
+                <a href="{% url 'update' habit_id=habit.habit_id %}"
+                   type="button" class="btn btn-warning mb-3" style="width: 142px!important;">Отменить</a>
+                {% endif %}
+                <a href="{% url 'delete' habit_id=habit.habit.id %}"
+                   type="button" class="btn btn-outline-danger mb-3" style="width: 142px!important;">Удалить</a>
+                <a href="{% url 'show_qr' habit_id=habit.habit.id %}"
+                   type="button" class="btn btn-outline-dark mb-3" style="width: 142px!important;">QR</a>
+            </div>
         </div>
-        <button class="ui teal basic button" type="submit">Добавить</button>
-    </form>
-
-
-{% for habit in today_habits %}
-<div class="ui segment">
-    <p class="ui big header">{{ habit.habit }}</p>
-
-    {% if habit.is_completed == False %}
-    <span  class="ui gray label">Не завершено</span>
-    <a class="ui blue primary button" href="{% url 'update' habit_id=habit.habit_id %}">Выполнить</a>
-    {% else %}
-    <span style="width: 102.59px;" class="ui green label">Завершено</span>
-    <a style="width: 122.16px;" class="ui basic button" href="{% url 'update' habit_id=habit.habit_id %}">Отменить</a>
-    {% endif %}
-    <a class="ui negative basic button" href="{% url 'delete' habit_id=habit.habit.id %}">Удалить</a>
-    <a class="ui  basic button" href="{% url 'show_qr' habit_id=habit.habit.id %}">QR</a>
+        {% endfor %}
+    </div>
 </div>
-{% endfor %}
-</div>
-
 {% endblock content %}

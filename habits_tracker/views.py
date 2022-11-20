@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from .models import *
@@ -204,7 +204,7 @@ def update(request, habit_id):
     if request.user.id == habit.habit.user_id:
         habit.is_completed = not habit.is_completed
         habit.save()
-    return redirect('habits_tracker_index')
+    return HttpResponseRedirect(f'/habits-tracker/#{habit_id}')
 
 
 @login_required(login_url='/login/')

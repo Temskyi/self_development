@@ -79,9 +79,9 @@ def workout_details(request, workout_id):
             exercise = request.POST['exercise']
             weight = request.POST['weight']
             reps = request.POST['reps']
-            exercise = Exercise.objects.get(name=exercise)
+            exercise = Exercise.objects.filter(Q(creator=request.user.id) | Q(creator=None), name=exercise).first()
             muscle_groups = exercise.muscle_groups.all()
-            workout = Workout.objects.get(id=workout_id)
+            workout = Workout.objects.get(id=workout_id).first()
             for muscle_group in muscle_groups:
                 workout.muscle_groups.add(muscle_group)
             workout.save()
@@ -156,7 +156,6 @@ def workout_delete_set(request, workout_id, set_id, exercise_id):
     workout = Workout.objects.get(id=workout_id)
     del_set = Set.objects.get(id=set_id)
     del_set_muscle_groups = [str(group) for group in del_set.exercise.muscle_groups.all()]
-    print(del_set_muscle_groups)
     del_set.delete()
     sets = Set.objects.filter(workout_id=workout_id)
     workout_muscle_groups = []
