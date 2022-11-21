@@ -5,7 +5,7 @@
 <div class='py-4 mt-auto'>
     <div class='container px-4'>
 <h1 class="text-center">Трекер привычек</h1><br>
-            <h5 class="text-center">Управляй своими привычками!</h5>
+            <h5 class="text-center" style="color:grey">Управляй своими привычками!</h5>
 
             <form action="{% url 'add' %}"
                   method='POST'>
@@ -14,7 +14,7 @@
                     <div class='row'>
                         <div class='mb-3'>
                             <label for='name' class='form-label mt-2'>
-                                Новая привычка
+                                <strong>Новая привычка</strong>
                             </label>
                             <input
                                     type="text"
@@ -38,7 +38,7 @@
         <div class="card mb-2">
             <a id="{{ habit.habit_id }}"></a>
             <div class="card-body">
-                <h5 class="card-title">{{ habit.habit }}</h5>
+                <h5 class="card-title" style="font-weight: 600;">{{ habit.habit }}</h5>
                 {% if habit.is_completed == False %}
                 <button type="button" class="btn btn-secondary mb-3" style="width: 142px!important;" disabled>Не завершено</button>
                 <a class="btn btn-primary mb-3" style="width: 142px!important;"

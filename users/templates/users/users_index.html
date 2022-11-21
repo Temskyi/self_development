@@ -1,10 +1,52 @@
 {% extends 'users/users_base.html' %}
+{% load static %}
 
 {% block title %}Self-Development | Login{% endblock %}
 
 {% block content %}
 
+<div class='py-4 mt-auto'>
+    <div class='container px-4'>
 
+        <div class="card mb-3">
+
+            <div class="card-body" style="background-color:#e9e9e9">
+                <h3 class="card-title"><strong>Трекер привычек</strong></h3>
+                <p class="card-text" style="font-size:18px">
+                    Сосредоточьтесь на том, что действительно важно с Трекером привычек.<br>
+                    Создайте лучшую версию себя, овладев своими привычками.
+                </p>
+                <a href="{% url 'habits_tracker_index' %}" class="btn btn-primary">Перейти</a>
+            </div>
+            <img class="card-img-bottom" src="{% static 'users/images/Habits-tracker.PNG' %}" alt="Habits-tracker">
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body" style="background-color:#e9e9e9">
+                <h3 class="card-title"><strong>Счетчик калорий</strong></h3>
+                <p class="card-text" style="font-size:18px">
+                    Крепкое здоровье начинается с того, что вы едите. <br>
+                    Хотите есть более осознанно? Отслеживайте приемы пищи, узнавайте о своих привычках и достигайте своих целей со Счетчиком калорий.
+                </p>
+                <a href="{% url 'calorie_counter_index' %}" class="btn btn-primary">Перейти</a>
+            </div>
+            <img class="card-img-bottom" src="{% static 'users/images/Calorie-tracker.PNG' %}" alt="Calorie-tracker">
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body" style="background-color:#e9e9e9">
+                <h3 class="card-title"><strong>Журнал тренировок</strong></h3>
+                <p class="card-text" style="font-size:18px">
+                    Записывайте свои подходы, вес и повторения для ваших упражнений, чтобы подталкивать себя каждый раз, когда вы посещаете тренажерный зал или тренируетесь дома.<br>
+                    Продвигайтесь дальше в своих тренировках, просматривая прошлый вес и повторения, чтобы вы могли постоянно увеличивать свою силу.
+                </p>
+                <a href="{% url 'workout_tracker_index' %}" class="btn btn-primary">Перейти</a>
+            </div>
+            <img class="card-img-bottom" src="{% static 'users/images/Workout-tracker.PNG' %}" alt="Workout-tracker">
+        </div>
+
+    </div>
+</div>
 
 
 {% endblock content %}

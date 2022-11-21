@@ -2,9 +2,11 @@
 
 {% block content %}
 
-<div style="margin-top: 50px;" class="ui container">
-    <img class="ui image centered " src="{{ url }}" />
-    <a class="fluid blue ui button" href="{% url 'habits_tracker_index' %}">На главную</a>
+<div class='py-4 mt-auto'>
+    <div class='container px-4' style="text-align: center">
+    <img class="ui image centered " src="{{ url }}" /><br>
+    <a class="btn btn-primary btn-lg btn-block" href="{% url 'habits_tracker_index' %}">Назад</a>
+    </div>
 </div>
 
 {% endblock content %}

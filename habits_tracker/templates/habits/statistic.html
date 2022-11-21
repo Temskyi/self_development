@@ -46,7 +46,7 @@
         <tr>
             <th></th>
             {% for day in days %}
-            <th>{{ day }}</th>
+            <th><strong>{{ day }}</strong></th>
             {% endfor%}
         </tr>
     </thead>
@@ -55,7 +55,7 @@
     {% for habit_cat in habits_list %}
         <tr>
             <th>
-            {{ habit_cat }}
+            <strong>{{ habit_cat }}</strong>
             </th>
             {% for habit in month_habits %}
 
