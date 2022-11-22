@@ -105,14 +105,14 @@ class Statistic(LoginRequiredMixin, ListView):
         completed_months = []
         month_before_previous = self.get_month_name(
             datetime.datetime.now().month - 2)
-        if len(Tracking.objects.filter(
+        if Tracking.objects.filter(
                 day=self.get_previous_month_date(2),
-                habit__in=user_habits)) != 0:
+                habit__in=user_habits).first():
             completed_months.append(month_before_previous)
         previous_month = self.get_month_name(datetime.datetime.now().month - 1)
-        if len(Tracking.objects.filter(
+        if Tracking.objects.filter(
                 day=self.get_previous_month_date(1),
-                habit__in=user_habits)) != 0:
+                habit__in=user_habits).first():
             completed_months.append(previous_month)
         completed_months.append(self.months[self.get_month_number() - 1])
 
@@ -120,7 +120,7 @@ class Statistic(LoginRequiredMixin, ListView):
             day__gte=f'{datetime.datetime.now().year}-{datetime.datetime.now().month}-01',
             habit__in=user_habits
         ).select_related('habit').order_by('day')
-        context['habits_list'] = Habits.objects.filter(user_id=self.request.user.id)
+        context['habits_list'] = user_habits
         context['days'] = list(range(1, _get_days_in_month() + 1))
         context['title'] = 'Статистика привычек за месяц'
         context['months'] = completed_months

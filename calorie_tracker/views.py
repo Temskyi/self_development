@@ -78,31 +78,29 @@ class TodayMeals(LoginRequiredMixin, ListView):
         total_protein = 0
         total_fat = 0
         total_carbohydrates = 0
+        day = Day.objects.filter(day=datetime.date.today(),
+                                 user=self.request.user.id).first()
+        if not day:
+            day = Day.objects.create(day=datetime.date.today(),
+                                     user=self.request.user)
+        meals = Meal.objects.filter(user=self.request.user.id, day=day)
         for meal in self.get_queryset():
             total_calories += meal.total_calories
             total_protein = total_protein + float(meal.total_protein)
             total_fat = total_fat + float(meal.total_fat)
             total_carbohydrates = total_carbohydrates + float(meal.total_carbohydrates)
+        context['meals'] = meals
         context['total_calories'] = total_calories
         context['total_protein'] = total_protein
         context['total_fat'] = total_fat
         context['total_carbohydrates'] = total_carbohydrates
         return context
 
-    def get_queryset(self):
-        day = Day.objects.filter(day=datetime.date.today(),
-                                 user=self.request.user.id).first()
-        if not day:
-            day = Day.objects.create(day=datetime.date.today(),
-                                     user=self.request.user)
-        return Meal.objects.filter(user=self.request.user.id, day=day)
-
 
 class MealDetails(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'calorie_tracker/meal_details.html'
     login_url = '/login/'
-    context_object_name = 'products'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -113,12 +111,8 @@ class MealDetails(LoginRequiredMixin, ListView):
         context['total_protein'] = meal.total_protein
         context['total_fat'] = meal.total_fat
         context['total_carbohydrates'] = meal.total_carbohydrates
+        context['products'] = Product.objects.select_related('dish').filter(meal=meal)
         return context
-
-    def get_queryset(self):
-        meal_id = self.kwargs['meal_id']
-        meal = Meal.objects.filter(id=meal_id).first()
-        return Product.objects.filter(meal=meal)
 
 
 @login_required

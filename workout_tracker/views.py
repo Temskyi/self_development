@@ -26,7 +26,7 @@ class ExerciseList(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Exercise.objects.filter(Q(creator=self.request.user.id) | Q(creator=None))
+        return Exercise.objects.prefetch_related('muscle_groups').filter(Q(creator=self.request.user.id) | Q(creator=None))
 
 
 @login_required
@@ -81,7 +81,7 @@ def workout_details(request, workout_id):
             reps = request.POST['reps']
             exercise = Exercise.objects.filter(Q(creator=request.user.id) | Q(creator=None), name=exercise).first()
             muscle_groups = exercise.muscle_groups.all()
-            workout = Workout.objects.get(id=workout_id).first()
+            workout = Workout.objects.get(id=workout_id)
             for muscle_group in muscle_groups:
                 workout.muscle_groups.add(muscle_group)
             workout.save()
@@ -90,7 +90,7 @@ def workout_details(request, workout_id):
             new_set.save()
 
             workout = Workout.objects.filter(id=workout_id).first()
-            sets = Set.objects.filter(workout=workout)
+            sets = Set.objects.select_related('exercise').filter(workout=workout)
             sets_count = len(sets)
             exercises_dct = {}
             for set in sets:
@@ -112,7 +112,7 @@ def workout_details(request, workout_id):
                           })
         except:
             workout = Workout.objects.filter(id=workout_id).first()
-            sets = Set.objects.filter(workout=workout)
+            sets = Set.objects.select_related('exercise').filter(workout=workout)
             sets_count = len(sets)
             exercises_dct = {}
             for set in sets:
@@ -133,7 +133,7 @@ def workout_details(request, workout_id):
                           })
     else:
         workout = Workout.objects.filter(id=workout_id).first()
-        sets = Set.objects.filter(workout=workout)
+        sets = Set.objects.select_related('exercise').filter(workout=workout)
         sets_count = len(sets)
         exercises_dct = {}
         for set in sets:
@@ -195,7 +195,7 @@ def delete_workout(request, workout_id):
 
 @login_required
 def workout_history(request):
-    workouts = Workout.objects.filter(user=request.user).order_by('-id')
+    workouts = Workout.objects.prefetch_related('muscle_groups').filter(user=request.user).order_by('-id')
     return render(request, 'workout_tracker/workout_history.html',{
         'workouts': workouts,
     })
