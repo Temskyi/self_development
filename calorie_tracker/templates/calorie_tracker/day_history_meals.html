@@ -16,9 +16,9 @@
         <div class="card text-center" style="margin-bottom:50px">
                 <h5 class="card-header">За день приемов пищи: {{ meals|length }}</h5>
                 <h5 class="card-header">Всего калорий: {{ total_calories }}<br>
-                    Всего белков: {{ total_protein }}<br>
-                    Всего жиров: {{ total_fat }}<br>
-                    Всего углеводов: {{ total_carbohydrates }}<br>
+                    Всего белков: {{ total_protein|floatformat:2 }}<br>
+                    Всего жиров: {{ total_fat|floatformat:2 }}<br>
+                    Всего углеводов: {{ total_carbohydrates|floatformat:2 }}<br>
                 </h5>
                 <div class="card-body">
                     <a href="{% url 'days_history' %}" class="btn btn-primary">Назад</a>

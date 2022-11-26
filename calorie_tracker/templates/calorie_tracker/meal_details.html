@@ -4,7 +4,7 @@
 
 {% block head %}
 <link href='{% static "calorie_tracker/css/bg_image.css" %}'
-          rel='stylesheet'>
+      rel='stylesheet'>
 {% endblock %}
 
 {% block body %}
@@ -13,16 +13,48 @@
 
 
         <div class="card text-center" style="margin-bottom:50px">
-                <h5 class="card-header">Количество продуктов: {{ products|length }}</h5>
-                <h5 class="card-header">Всего калорий: {{ total_calories }}<br>
-                    Всего белков: {{ total_protein }}<br>
-                    Всего жиров: {{ total_fat }}<br>
-                    Всего углеводов: {{ total_carbohydrates }}<br>
-                </h5>
-                <div class="card-body">
-                    <a href="{% url 'add_product' meal_id=meal_id %}" class="btn btn-primary">Добавить новый продукт</a>
+            <h5 class="card-header">Количество продуктов: {{ products|length }}</h5>
+            <h5 class="card-header">Всего калорий: {{ total_calories }}<br>
+                Всего белков: {{ total_protein|floatformat:2 }}<br>
+                Всего жиров: {{ total_fat|floatformat:2 }}<br>
+                Всего углеводов: {{ total_carbohydrates|floatformat:2 }}<br>
+            </h5>
+            <div class="card-body">
+
+                <div class='form-group'>
+                    <div class="row"
+                         style="max-width:400px;margin-left:auto;margin-right:auto;">
+                        <form action="{% url 'add_product' meal_id=meal_id %}"
+                              method='POST' enctype='multipart/form-data'>
+                            {% csrf_token %}
+                            <div class="form-error">{{ form.non_field_errors }}
+                            </div>
+
+                            <div class='form-group'>
+                                {{ product_form.as_p }}
+
+                                <button type='submit' class='btn btn-primary'>
+                                    Добавить
+                                </button>
+                                <a href="{% url 'today_meals' %}"
+                                   class='btn btn-outline-dark'>Назад</a>
+                            </div>
+
+                        </form>
+                    </div>
                 </div>
+                {% if fail %}
+                <br>
+                <div class='alert alert-dismissible alert-danger' role='alert'>
+                    <button type='button' class='btn-close'
+                            data-bs-dismiss='alert'></button>
+                    Произошла ошибка при попытке добавить продукт.
+                    Проверьте правильность данных.
+                </div>
+                {% endif %}
+
             </div>
+        </div>
 
         <div class='row justify-content-center'>
 
@@ -35,7 +67,8 @@
                     <h5 class="card-title">Белков: {{ product.protein }}</h5>
                     <h5 class="card-title">Жиров: {{ product.fat }}</h5>
                     <h5 class="card-title">Углеводов: {{ product.carbohydrates }}</h5>
-                    <a href="{% url 'delete_product' meal_id=meal_id product_id=product.id %}" class="btn btn-primary">Удалить</a>
+                    <a href="{% url 'delete_product' meal_id=meal_id product_id=product.id %}"
+                       class="btn btn-primary">Удалить</a>
                 </div>
             </div>
 

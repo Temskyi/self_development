@@ -69,7 +69,6 @@ class TodayMeals(LoginRequiredMixin, ListView):
     model = Meal
     template_name = 'calorie_tracker/today_meals.html'
     login_url = '/login/'
-    context_object_name = 'meals'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -84,7 +83,7 @@ class TodayMeals(LoginRequiredMixin, ListView):
             day = Day.objects.create(day=datetime.date.today(),
                                      user=self.request.user)
         meals = Meal.objects.filter(user=self.request.user.id, day=day)
-        for meal in self.get_queryset():
+        for meal in meals:
             total_calories += meal.total_calories
             total_protein = total_protein + float(meal.total_protein)
             total_fat = total_fat + float(meal.total_fat)
@@ -104,6 +103,7 @@ class MealDetails(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['product_form'] = ProductForm(user_id=self.request.user.id)
         context['title'] = 'Прием пищи'
         context['meal_id'] = self.kwargs['meal_id']
         meal = Meal.objects.get(id=self.kwargs['meal_id'])
@@ -120,7 +120,7 @@ def add_meal(request):
     day = Day.objects.filter(day=datetime.date.today(),
                              user=request.user.id).first()
     new_meal = Meal.objects.create(user=request.user, day=day)
-    return render(request, 'calorie_tracker/meal_details.html', {'meal_id': new_meal.id})
+    return render(request, 'calorie_tracker/meal_details.html', {'meal_id': new_meal.id, 'product_form': ProductForm(user_id=request.user.id)})
 
 
 @login_required
@@ -162,19 +162,9 @@ def add_product(request, meal_id):
             day.total_fat = float(day.total_fat) + new_product.fat
             day.total_carbohydrates = float(day.total_carbohydrates) + new_product.carbohydrates
             day.save()
-            return render(request, 'calorie_tracker/add_product.html', {
-                'product_form': ProductForm(user_id=request.user.id),
-                'success': True,
-                'meal_id': meal_id
-            })
+            return HttpResponseRedirect(f'/calorie-tracker/today_meals/{meal_id}/')
         else:
-            return render(request, 'calorie_tracker/add_product.html',
-                          {'product_form': ProductForm(user_id=request.user.id),
-                           'meal_id': meal_id,
-                           'fail': True})
-    else:
-        return render(request, 'calorie_tracker/add_product.html',
-                      {'product_form': ProductForm(user_id=request.user.id), 'meal_id': meal_id})
+            return HttpResponseRedirect(f'/calorie-tracker/today_meals/{meal_id}/', {'fail': True})
 
 
 @login_required

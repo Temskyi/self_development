@@ -89,12 +89,13 @@ class Product(models.Model):
     dish = models.ForeignKey(
         Dish,
         on_delete=models.CASCADE,
+        verbose_name="Блюдо"
     )
     meal = models.ForeignKey(
         Meal,
         on_delete=models.CASCADE,
     )
-    weight = models.IntegerField()
+    weight = models.IntegerField(verbose_name="Вес")
     calories = models.IntegerField(verbose_name='Калории')
     protein = models.DecimalField(max_digits=5, decimal_places=2)
     fat = models.DecimalField(max_digits=5, decimal_places=2)
