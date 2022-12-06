@@ -12,7 +12,7 @@
     <div class='container px-4'>
 
 
-        <div class="card text-center" style="margin-bottom:50px">
+        <div class="card text-center" style="margin-bottom:50px;max-width: 1200px;">
             <h5 class="card-header">Количество продуктов: {{ products|length }}</h5>
             <h5 class="card-header">Всего калорий: {{ total_calories }}<br>
                 Всего белков: {{ total_protein|floatformat:2 }}<br>
@@ -56,24 +56,41 @@
             </div>
         </div>
 
-        <div class='row justify-content-center'>
+
 
             {% for product in products %}
-            <div class="card" style="margin-bottom:15px">
-                <h5 class="card-header">{{ product.dish.name }}</h5>
-                <div class="card-body">
-                    <h5 class="card-title">Вес: {{ product.weight }}</h5>
-                    <h5 class="card-title">Калорий: {{ product.calories }}</h5>
-                    <h5 class="card-title">Белков: {{ product.protein }}</h5>
-                    <h5 class="card-title">Жиров: {{ product.fat }}</h5>
-                    <h5 class="card-title">Углеводов: {{ product.carbohydrates }}</h5>
-                    <a href="{% url 'delete_product' meal_id=meal_id product_id=product.id %}"
-                       class="btn btn-primary">Удалить</a>
+            <div class="card mb-3" style="max-width: 1200px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        {% if product.dish.image %}
+                        <img src="{{ product.dish.image.url }}"
+                             class="img-fluid rounded-start" alt="exercise image">
+                        {% else %}
+                        <img src="{% static 'workout_tracker/images/no_image.png' %}"
+                             class="img-fluid rounded-start" alt="exercise image">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ product.dish.name }}</h3>
+                            <h5>Вес: {{ product.weight }} <br>
+                            Калорий: {{ product.calories }}<br>
+                            Белков: {{ product.protein }}<br>
+                            Жиров: {{ product.fat }}<br>
+                            Углеводов: {{ product.carbohydrates }}<br>
+                            <a href="{% url 'delete_product' meal_id=meal_id product_id=product.id %}"
+                           class="btn btn-danger">Удалить</a></h5>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+
+
+
+
             {% endfor %}
 
-        </div>
+
     </div>
     {% endblock %}

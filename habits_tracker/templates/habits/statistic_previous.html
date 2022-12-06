@@ -9,37 +9,51 @@
 
 
 
-<div style="margin-top: 50px;margin-bottom: 100px;" class="ui container">
-    <h1 class="ui center aligned header">Трекер привычек</h1>
-    <h3 class="test_style">{{title}}</h3>
-    {% if months|length_is:"1" %}
-    {% elif months|length_is:"2" %}
-    <div class="two ui buttons">
-        <a class="ui button" href="{% url 'statistic_previous' month=1 %}">Статистика за {{ months|first }}</a>
-        <a class="ui button" href="{% url 'statistic' %}">Статистика за {{months|last}}</a>
-    </div>
-    {% elif months|length_is:"3" %}
-    <div class="three ui buttons">
-        {% for month in months %}
-        {% if forloop.counter0 == 0 %}
-        <a class="ui button" href="{% url 'statistic_previous' month=2 %}">Статистика за {{month}}</a>
-        {% elif forloop.counter0 == 1 %}
-        <a class="ui button" href="{% url 'statistic_previous' month=1 %}">Статистика за {{month}}</a>
-        {% elif forloop.counter0 == 2 %}
-        <a class="ui button" href="{% url 'statistic' %}">Статистика за {{month}}</a>
-        {% endif%}
-        {% endfor %}
-    </div>
-    {% endif %}
+<div class='py-4 mt-auto' style="margin-top: 50px;margin-bottom: 10px;" >
+    <div class='container px-4' align="center">
+        <h1 class="text-center">Трекер привычек</h1><br>
+        <h5 class="text-center">{{title}}</h5><br>
+        {% if months|length_is:"1" %}
+        {% elif months|length_is:"2" %}
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <a href="{% url 'statistic_previous' month=1 %}" class="btn btn-secondary ">
+            Статистика за {{ months|first }}
+          </a>
+          <a href="{% url 'statistic' %}" class="btn btn-secondary">
+            Статистика за {{months|last}}
+          </a>
+        </div>
+        {% elif months|length_is:"3" %}
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            {% for month in months %}
+            {% if forloop.counter0 == 0 %}
+            <a href="{% url 'statistic_previous' month=2 %}" class="btn btn-secondary">
+            Статистика за {{month}}
+            </a>
+            {% elif forloop.counter0 == 1 %}
+            <a href="{% url 'statistic_previous' month=1 %}" class="btn btn-secondary">
+                Статистика за {{month}}
+            </a>
+            {% elif forloop.counter0 == 2 %}
+            <a href="{% url 'statistic' %}" class="btn btn-secondary">
+                Статистика за {{month}}
+            </a>
+            {% endif%}
+            {% endfor %}
+        </div>
+        {% endif %}
 
+    </div>
 </div>
-<table class="ui definition table" style="margin-bottom: 50px;">
 
+
+<div class="table-responsive tableFix" style="margin-bottom:165px;">
+  <table class="table">
     <thead>
         <tr>
             <th></th>
             {% for day in days %}
-            <th>{{ day }}</th>
+            <th><strong>{{ day }}</strong></th>
             {% endfor%}
         </tr>
     </thead>
@@ -47,17 +61,17 @@
     <tbody>
     {% for habit_cat in habits_list %}
         <tr>
-            <td>
-            {{ habit_cat }}
-            </td>
+            <th>
+            <strong>{{ habit_cat }}</strong>
+            </th>
             {% for habit in month_habits %}
 
                 {% if habit.habit == habit_cat %}
             <td>
                 {% if habit.is_completed == False %}
-                <a href="#"><span style="width: 26px;" class="ui red label">-</span></a>
+                <a href="#"><span style="width: 28px;height: 28px;padding-top:2px" class="btn btn-danger btn-sm">-</span></a>
                 {% else %}
-                <a href="#"><span style="width: 26px;" class="ui green label">+</span></a>
+                <a href="#"><span style="width: 28px;height: 28px;padding-top:3px" class="btn btn-success btn-sm">+</span></a>
                 {% endif %}
             </td>
                 {% endif %}
@@ -67,29 +81,39 @@
     {% endfor %}
 
     </tbody>
-
-</table>
-
-<div style="background-color: #E7E9EB;padding-bottom:50px;padding-top:50px">
-
-<h1 class="ui center aligned header" style="margin-bottom:150px">Прогресс</h1>
-
-<div style="width:1200px;margin-left:auto;margin-right:auto">
-{% for key, value in progress.items %}
-<div class="ui indicating progress" data-percent="{{value}}" style="margin-bottom: 100px;">
-  <div class="bar" style="transition-duration: 300ms; width: {{value}}%;">
-    <div class="progress">{{ value }}%</div>
-  </div>
-  <div class="label">{{ key }}</div>
-</div>
-{% endfor %}
-</div>
+  </table>
 </div>
 
 
 
-
-
-
+<div class='py-4 mt-auto' style="background-color: #E7E9EB" align="center">
+    <div class='container px-4' style="padding-bottom:100px;padding-top:120px;">
+        <h1 class="text-center">Прогресс</h1><br>
+    </div>
+    {% for key, value in progress.items %}
+    {% if value <= 25 %}
+    <h3 class="text-center">{{ key }}</h3>
+    <div class="progress" style="max-width:1200px;margin-bottom:70px">
+        <div class="progress-bar bg-danger" role="progressbar" style="width: {{value}}%" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100">{{ value }}%</div>
+    </div>
+    {% elif value <= 50 %}
+    <h3 class="text-center">{{ key }}</h3>
+    <div class="progress" style="max-width:1200px;margin-bottom:70px">
+        <div class="progress-bar bg-warning" role="progressbar" style="width: {{value}}%" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100">{{ value }}%</div>
+    </div>
+    {% elif value <= 75 %}
+    <h3 class="text-center">{{ key }}</h3>
+    <div class="progress" style="max-width:1200px;margin-bottom:70px">
+        <div class="progress-bar bg-info" role="progressbar" style="width: {{value}}%" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100">{{ value }}%</div>
+    </div>
+    {% elif value <= 100 %}
+    <h3 class="text-center">{{ key }}</h3>
+    <div class="progress" style="max-width:1200px;margin-bottom:70px">
+        <div class="progress-bar bg-success" role="progressbar" style="width: {{value}}%" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100">{{ value }}%</div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <div style="height:100px"></div>
+</div>
 
 {% endblock content %}

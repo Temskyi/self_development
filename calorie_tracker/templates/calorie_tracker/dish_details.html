@@ -11,31 +11,14 @@
 
         <h3>{{ dish.name }}</h3>
 
-        <div class='row justify-content-center'>
-            <div class='col-6'>
-
-                <!-- Food image -->
-                {% if dish.image %}
-                    <a href='#'>
-                        <img
-                            src="{{ dish.image.url }}"
-                            class='img-fluid'
-                            alt='food image'
-                        >
-                    </a>
-                    {% else %}
-                    <a href='#'>
-                        <img
-                            src="{% static 'calorie_tracker/images/no_image.png' %}"
-                            class='img-fluid'
-                            alt='food image'
-                        >
-                    </a>
-                    {% endif %}
-
-            </div>
-            <div class='col-6'>
-                <div class='card text-white bg-info mb-3'>
+        <div class="card mb-3" style="border:none;box-shadow:none;max-width:800px;margin-left:auto;margin-right:auto">
+            {% if dish.image %}
+          <img class="card-img-top" src="{{ dish.image.url }}" alt="food image">
+            {% else %}
+            <img class="card-img-top" src="{% static 'calorie_tracker/images/no_image.png' %}" alt="food image">
+            {% endif %}
+          <div class="card-body" style="padding-right:0px;padding-left:0px">
+            <div class='card text-white bg-info mb-3'>
                     <div class='card-header'>
                         <div class='d-flex w-100 justify-content-between'>
                             <h5 class='card-title mb-1'>
@@ -47,7 +30,7 @@
                             <input type='hidden' id='fat_details' name='calories_details' value='{{ dish.fat }}'>
                             <input type='hidden' id='carbohydrates_details' name='calories_details' value='{{ dish.carbohydrates }}'>
                             <input type='hidden' id='protein_details' name='calories_details' value='{{ dish.protein }}'>
-                        
+
                         </div>
                     </div>
                     <div class='card-body'>
@@ -85,10 +68,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
+          </div>
         </div>
-
     </div>
 </div>
 {% endblock %}
