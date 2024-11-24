@@ -1,5 +1,4 @@
 {% extends 'habits/habits_base.html' %}
-
 {% block content %}
 
 <div class='py-4 mt-auto'>
@@ -37,19 +36,16 @@
         {% for habit in today_habits %}
         <div class="card mb-2">
             <a id="{{ habit.habit_id }}"></a>
-            <div class="card-body">
+            <div class="card-body habit-{{habit.habit_id}}">
                 <h5 class="card-title" style="font-weight: 600;">{{ habit.habit }}</h5>
                 {% if habit.is_completed == False %}
-                <button type="button" class="btn btn-secondary mb-3" style="width: 142px!important;" disabled>Не завершено</button>
-                <a class="btn btn-primary mb-3" style="width: 142px!important;"
-                   href="{% url 'update' habit_id=habit.habit_id %}"
-                   role="button">Выполнить</a>
+                <button type="button" class="btn btn-secondary mb-3 success_button" style="width: 142px!important;" disabled>Не завершено</button>
+                <button onclick="update_habit({{habit.habit_id}})" class="btn btn-primary mb-3 update_habit_{{habit.habit_id}}" style="width: 142px!important;" role="button">Выполнить</button>
                 {% else %}
-                <button type="button" class="btn btn-success mb-3" style="width: 142px!important;" disabled>
+                <button type="button" class="btn btn-success mb-3 success_button" style="width: 142px!important;" disabled>
                     Завершено
                 </button>
-                <a href="{% url 'update' habit_id=habit.habit_id %}"
-                   type="button" class="btn btn-warning mb-3" style="width: 142px!important;">Отменить</a>
+                <button onclick="update_habit({{habit.habit_id}})" type="button" class="btn btn-warning mb-3 update_habit_{{habit.habit_id}}" style="width: 142px!important;">Отменить</button>
                 {% endif %}
                 <a href="{% url 'delete' habit_id=habit.habit.id %}"
                    type="button" class="btn btn-outline-danger mb-3" style="width: 142px!important;">Удалить</a>
@@ -61,3 +57,4 @@
     </div>
 </div>
 {% endblock content %}
+

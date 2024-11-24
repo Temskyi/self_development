@@ -9,16 +9,16 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render, redirect
 
 from .models import *
 from django.conf.global_settings import ALLOWED_HOSTS
 
 
-def _get_days_in_month(num=0):
+def _get_days_in_month(num=0, year=0):
     num = int(num)
-    year = datetime.datetime.now().year
+    year = datetime.datetime.now().year - year
     month = datetime.datetime.now().month - num
     if month < 1:
         year -= 1
@@ -114,7 +114,7 @@ class Statistic(LoginRequiredMixin, ListView):
                 day=self.get_previous_month_date(1),
                 habit__in=user_habits).first():
             completed_months.append(previous_month)
-        completed_months.append(self.months[self.get_month_number() - 1])
+        completed_months.append(self.months[int(self.get_month_number()) - 1])
 
         context['month_habits'] = Tracking.objects.filter(
             day__gte=f'{datetime.datetime.now().year}-{datetime.datetime.now().month}-01',
@@ -133,7 +133,7 @@ class StatisticPrevious(Statistic):
     template_name = 'habits/statistic_previous.html'
     login_url = '/login/'
 
-    def get_statistic(self, days:int, habits):
+    def get_statistic(self, days: int, habits):
         statistic = {}
         for tracking in habits:
             if tracking.is_completed:
@@ -150,8 +150,13 @@ class StatisticPrevious(Statistic):
         user_habits = Habits.objects.filter(user=self.request.user.id)
 
         month_num = self.get_month_number(self.kwargs["month"])
-        first_day = f'{datetime.datetime.now().year}-{month_num}-01'
-        last_day = f'{datetime.datetime.now().year}-{month_num}-{_get_days_in_month(self.kwargs["month"])}'
+        if month_num in [11, 12]:
+            first_day = f'{datetime.datetime.now().year - 1}-{month_num}-01'
+            last_day = f'{datetime.datetime.now().year - 1}-{month_num}-{_get_days_in_month(num=self.kwargs["month"], year=1)}'
+
+        else:
+            first_day = f'{datetime.datetime.now().year}-{month_num}-01'
+            last_day = f'{datetime.datetime.now().year}-{month_num}-{_get_days_in_month(self.kwargs["month"])}'
         context['month_habits'] = Tracking.objects.filter(
             day__range=(first_day, last_day),
             habit__in=user_habits
@@ -204,7 +209,7 @@ def update(request, habit_id):
     if request.user.id == habit.habit.user_id:
         habit.is_completed = not habit.is_completed
         habit.save()
-    return HttpResponseRedirect(f'/habits-tracker/#{habit_id}')
+    return HttpResponse(str(habit.is_completed), content_type="text/html")
 
 
 @login_required(login_url='/login/')

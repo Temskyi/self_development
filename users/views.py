@@ -3,10 +3,10 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView
+from django.db import IntegrityError
+
 from .forms import *
 from .models import CustomUser
-from django.db import IntegrityError
 
 
 def register(request):
@@ -36,28 +36,6 @@ def register(request):
         return render(request, 'users/register.html')
 
 
-
-# class RegisterUser(CreateView):
-#     form_class = RegisterUserForm
-#     template_name = 'users/register.html'
-#     success_url = reverse_lazy('index')
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['title'] = 'Регистрация'
-#         return context
-#
-#     def form_invalid(self, form):
-#         return self.render_to_response(self.get_context_data(
-#             form=form,
-#             message='Введены неверные данные.'))
-#
-#     def form_valid(self, form):
-#         user = form.save()
-#         login(self.request, user)
-#         return redirect('users_index')
-
-
 class LoginUser(LoginView):
     form_class = AuthenticationForm
     template_name = 'users/login.html'
@@ -69,7 +47,7 @@ class LoginUser(LoginView):
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(
             form=form,
-            message='Неверное имя пользователя и / или пароль.'))
+            message='Неверное имя пользователя и/или пароль.'))
 
     def get_success_url(self):
         return reverse_lazy('users_index')
